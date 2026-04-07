@@ -28,8 +28,8 @@ This repository contains the backend of an Uber-like app for motorcycle couriers
 ### 1. Clone the Repository
 
 ```sh
- git clone https://github.com/samuelbaldasso/UberLike.git
- cd UberLike
+ git clone https://github.com/samuelbaldasso/Java-Uber-Like-App.git
+ cd Java-Uber-Like-App
 ```
 
 ### 2. Configure the Database
