@@ -96,12 +96,14 @@ public class NotificationServiceImpl implements NotificationService {
 
   @Override
   @Transactional
-  public void markNotificationAsRead(UUID notificationId) {
-    notificationRepository.findById(notificationId).ifPresent(notification -> {
-      notification.setRead(true);
-      notification.setReadAt(LocalDateTime.now());
-      notificationRepository.save(notification);
-    });
+  public void markNotificationAsRead(UUID notificationId, UUID userId) {
+    notificationRepository.findById(notificationId)
+        .filter(notification -> notification.getUser().getId().equals(userId))
+        .ifPresent(notification -> {
+          notification.setRead(true);
+          notification.setReadAt(LocalDateTime.now());
+          notificationRepository.save(notification);
+        });
   }
 
   @Override

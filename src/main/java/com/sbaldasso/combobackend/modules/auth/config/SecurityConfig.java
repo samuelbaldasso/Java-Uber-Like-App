@@ -3,6 +3,7 @@ package com.sbaldasso.combobackend.modules.auth.config;
 import com.sbaldasso.combobackend.modules.auth.filter.JwtAuthenticationFilter;
 import com.sbaldasso.combobackend.modules.auth.service.JwtService;
 import com.sbaldasso.combobackend.modules.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +52,10 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint((request, response, authException) ->
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()))
+            )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -59,13 +64,21 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
+        return username -> findUser(username)
                 .map(user -> new org.springframework.security.core.userdetails.User(
                         user.getId().toString(),
                         user.getPassword(),
                         Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getUserType().name()))
                 ))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    private java.util.Optional<com.sbaldasso.combobackend.modules.user.domain.User> findUser(String usernameOrId) {
+        try {
+            return userRepository.findById(java.util.UUID.fromString(usernameOrId));
+        } catch (IllegalArgumentException e) {
+            return userRepository.findByEmail(usernameOrId);
+        }
     }
 
     @Bean

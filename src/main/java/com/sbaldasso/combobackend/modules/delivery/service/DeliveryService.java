@@ -24,17 +24,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class DeliveryService {
 
-  private DeliveryRepository deliveryRepository;
-  private UserService userService;
-  private LocationService locationService;
-  private NotificationService notificationService;
-
-  public DeliveryService(DeliveryRepository deliveryRepository, UserService userService, LocationService locationService, NotificationService notificationService) {
-    this.deliveryRepository = deliveryRepository;
-    this.userService = userService;
-    this.locationService = locationService;
-    this.notificationService = notificationService;
-  }
+  private final DeliveryRepository deliveryRepository;
+  private final UserService userService;
+  private final LocationService locationService;
+  private final NotificationService notificationService;
 
   @Transactional
   public DeliveryResponse createDelivery(UUID customerId, CreateDeliveryRequest request) {

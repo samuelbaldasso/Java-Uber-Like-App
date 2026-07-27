@@ -41,9 +41,10 @@ class NotificationControllerTest {
   @Test
   void markAsRead_returnsOk() {
     UUID notificationId = UUID.randomUUID();
-    ResponseEntity<Void> result = notificationController.markAsRead(notificationId);
+    UUID userId = UUID.randomUUID();
+    ResponseEntity<Void> result = notificationController.markAsRead(notificationId, userId);
     assertEquals(200, result.getStatusCodeValue());
-    verify(notificationService).markNotificationAsRead(notificationId);
+    verify(notificationService).markNotificationAsRead(notificationId, userId);
   }
 
   @Test

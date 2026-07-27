@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/combobackend
-    username: combo_user
-    password: combo_pass
+    url: jdbc:postgresql://localhost:5432/motoboy_delivery
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

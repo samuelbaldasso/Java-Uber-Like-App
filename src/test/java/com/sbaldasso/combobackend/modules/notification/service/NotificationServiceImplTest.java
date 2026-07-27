@@ -4,6 +4,7 @@ import com.sbaldasso.combobackend.modules.delivery.domain.Delivery;
 import com.sbaldasso.combobackend.modules.location.repository.LocationRepository;
 import com.sbaldasso.combobackend.modules.notification.domain.Notification;
 import com.sbaldasso.combobackend.modules.notification.repository.NotificationRepository;
+import com.sbaldasso.combobackend.modules.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -46,9 +47,11 @@ class NotificationServiceImplTest {
   @Test
   void markNotificationAsRead_updatesNotification() {
     UUID notificationId = UUID.randomUUID();
+    UUID userId = UUID.randomUUID();
     Notification notification = new Notification();
+    notification.setUser(new User(userId));
     when(notificationRepository.findById(notificationId)).thenReturn(Optional.of(notification));
-    notificationService.markNotificationAsRead(notificationId);
+    notificationService.markNotificationAsRead(notificationId, userId);
     assertTrue(notification.isRead());
     assertNotNull(notification.getReadAt());
     verify(notificationRepository).save(notification);
